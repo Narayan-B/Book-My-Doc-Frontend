@@ -4,6 +4,7 @@ import axios from "axios";
 import {BsGeoAltFill} from 'react-icons/bs'
 import { FaHospitalAlt } from "react-icons/fa";
 import { IoMdTime } from "react-icons/io"
+import { RiMoneyRupeeCircleFill } from "react-icons/ri";
 import { Card, CardBody, CardTitle, CardSubtitle, CardText, Button, Container, Row, Col, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { useAuth } from "../context/AuthContext";
 export default function AllVerifiedDoctors() {
@@ -18,7 +19,7 @@ export default function AllVerifiedDoctors() {
             try {
                 const response = await axios.get('http://localhost:5555/api/verified-doctors');
                 setDoctors(response.data);
-                console.log()
+                //console.log(response.data)
             } catch (err) {
                 console.log(err); 
             }
@@ -62,6 +63,7 @@ export default function AllVerifiedDoctors() {
                                 <CardText><><IoMdTime/></>   {doctor.yearsOfExperience} years Of Experience</CardText>
                                 <CardText><><FaHospitalAlt/></> {doctor.hospitalName} Hospital</CardText>
                                 <CardText><><BsGeoAltFill/></>{doctor.hospitalAddress.city}</CardText>
+                                <CardText><><RiMoneyRupeeCircleFill/></>{doctor.consultationFees}</CardText>
                                 
                                 {user && 
                                 <>
@@ -91,6 +93,14 @@ export default function AllVerifiedDoctors() {
                             <p><strong>hospitalAddress:</strong> {selectedDoctor.hospitalAddress.street}, {selectedDoctor.hospitalAddress.city}, {selectedDoctor.hospitalAddress.state},  {selectedDoctor.hospitalAddress.country},{selectedDoctor.hospitalAddress.pinCode}.</p>
                             <p><strong>Speciality:</strong> {selectedDoctor.userId.speciality}</p>
                             <p><strong>Years of Experience:</strong> {selectedDoctor.yearsOfExperience}</p>
+                            <p><strong>Languages Known:</strong>{" "}
+                            {selectedDoctor.languagesSpoken.map((ele, i) => (
+                                <span key={i}>
+                                    {ele}
+                                    {i !== selectedDoctor.languagesSpoken.length - 1 ? ", " : ""}
+                                    </span>
+                                 ))}</p>
+                                 <p><strong>Consultation Fees: </strong>{selectedDoctor.consultationFees}</p>
                             {/* Add more fields as needed */}
                         </div>
                     )}

@@ -3,11 +3,13 @@ import axios from 'axios';
 import Multiselect from 'multiselect-react-dropdown';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
+import { useAuth } from '../context/AuthContext';
 import { Country, State, City } from 'country-state-city';
 import { languages } from '../languages';
-import { Step, Stepper } from 'react-form-stepper';
+
 
 const DoctorProfile = () => {
+    const { user } = useAuth();
     const [form, setForm] = useState({
         firstName: '',
         lastName: '',
@@ -35,7 +37,6 @@ const DoctorProfile = () => {
     const [countryList, setCountryList] = useState([]);
     const [stateList, setStateList] = useState([]);
     const [cityList, setCityList] = useState([]);
-    const [activeStep, setActiveStep] = useState(0);
 
     const languageOptions = languages.map(lang => ({ name: lang.name, code: lang.code }));
 
@@ -45,14 +46,7 @@ const DoctorProfile = () => {
             languagesSpoken: selectedList.map(lang => lang.name)
         });
     };
-    const handleNext = () => {
-        setActiveStep(prevActiveStep => prevActiveStep + 1);
-      };
 
-    
-      const handleBack = () => {
-        setActiveStep(prevActiveStep => prevActiveStep - 1);
-      };
     const handleLanguageRemove = (selectedList) => {
         setForm({
             ...form,
@@ -120,7 +114,7 @@ const DoctorProfile = () => {
             }
         };
         fetchProfileDetails();
-    }, []);
+    }, [user.role]);
 
     useEffect(() => {
         setCountryList(Country.getAllCountries());
@@ -258,9 +252,9 @@ const DoctorProfile = () => {
                 setIsProfileCreated(true);
             }
 
-            setTimeout(() => {
-                window.location.reload();
-            }, 1500);
+            // setTimeout(() => {
+            //     window.location.reload();
+            // }, 1500);
 
             console.log('Profile updated:', response.data);
         } catch (err) {
@@ -346,7 +340,7 @@ const DoctorProfile = () => {
                     country: profileData.hospitalAddress.country || ''
                 },
                 yearsOfExperience: profileData.yearsOfExperience || '',
-                languagesSpoken: [],
+                languagesSpoken:"",
                 consultationFees:profileData.consultationFees||''
             });
         } else {
@@ -374,93 +368,80 @@ const DoctorProfile = () => {
     return (
         <div className='col-md-4'>
             <h2>Doctor Profile</h2>
-            <Stepper activeStep={activeStep}>
-                <Step label="Basic Details" />
-                <Step label="Hospital Details" />
-                <Step label="Extra Info" />
-            </Stepper>
-            {activeStep===0 &&
             <form onSubmit={handleSubmit}>
-            <div>
-                <label htmlFor="firstName"><strong>First Name:</strong></label>
-                <input
-                    className='form-control'
-                    type="text"
-                    id="firstName"
-                    name="firstName"
-                    value={form.firstName}
-                    onChange={handleInputChange}
-                    disabled={!isEditMode}
-                />
-                {errors.firstName && <span style={{ color: 'red', margin: 0 }}>{errors.firstName}</span>}
-                {serverErrors.firstName && <span className="error">{serverErrors.firstName}</span>}
-            </div>
-            <div>
-                <label htmlFor="lastName"><strong>Last Name:</strong></label>
-                <input
-                    className='form-control'
-                    type="text"
-                    id="lastName"
-                    name="lastName"
-                    value={form.lastName}
-                    onChange={handleInputChange}
-                    disabled={!isEditMode}
-                />
-                {errors.lastName && <span style={{ color: 'red', margin: 0 }}>{errors.lastName}</span>}
-                {serverErrors.lastName && <span className="error">{serverErrors.lastName}</span>}
-            </div>
-            <div>
-                <label htmlFor="gender"><strong>Gender:</strong></label>
-                <select
-                    className='form-control'
-                    id="gender"
-                    name="gender"
-                    value={form.gender}
-                    onChange={handleInputChange}
-                    disabled={!isEditMode}
-                >
-                    <option value="">Select Gender</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Other">Other</option>
-                </select>
-                {errors.gender && <span style={{ color: 'red', margin: 0 }} className="error">{errors.gender}</span>}
-                {serverErrors.gender && <span className="error">{serverErrors.gender}</span>}
-            </div>
-            <div>
-                <label htmlFor="mobile"><strong>Mobile:</strong></label>
-                <input
-                    className='form-control'
-                    type="text"
-                    id="mobile"
-                    name="mobile"
-                    value={form.mobile}
-                    onChange={handleInputChange}
-                    disabled={!isEditMode}
-                />
-                {errors.mobile && <span style={{ color: 'red' }}>{errors.mobile}</span>}
-                {serverErrors.mobile && <span className="error">{serverErrors.mobile}</span>}
-            </div>
-            <div>
-                <label htmlFor="profilePic"><strong> Profile Picture:</strong></label>
-                <input
-                    className='form-control'
-                    type="file"
-                    id="profilePic"
-                    name="profilePic"
-                    onChange={(e) => setForm({ ...form, profilePic: e.target.files[0] })}
-                    disabled={!isEditMode}
-                />
-                {errors.profilePic && <span style={{ color: 'red' }}>{errors.profilePic}</span>}
-                {serverErrors.profilePic && <span className="error">{serverErrors.profilePic}</span>}
-            </div>
-            <button  className='btn btn-primary'onClick={handleNext}>Next</button>
-            <button className='btn btn-danger'onClick={handleBack}>Back</button>
-            {!isEditMode && <button className='btn btn-warning' type="button" onClick={handleEditClick}>Edit</button>}
-            </form>
-            }
-            {activeStep===1 && 
-            <form onSubmit={handleSubmit}>
+                <div>
+                    <label htmlFor="firstName"><strong>First Name:</strong></label>
+                    <input
+                        className='form-control'
+                        type="text"
+                        id="firstName"
+                        name="firstName"
+                        value={form.firstName}
+                        onChange={handleInputChange}
+                        disabled={!isEditMode}
+                    />
+                    {errors.firstName && <span style={{ color: 'red', margin: 0 }}>{errors.firstName}</span>}
+                    {serverErrors.firstName && <span className="error">{serverErrors.firstName}</span>}
+                </div>
+                <div>
+                    <label htmlFor="lastName"><strong>Last Name:</strong></label>
+                    <input
+                        className='form-control'
+                        type="text"
+                        id="lastName"
+                        name="lastName"
+                        value={form.lastName}
+                        onChange={handleInputChange}
+                        disabled={!isEditMode}
+                    />
+                    {errors.lastName && <span style={{ color: 'red', margin: 0 }}>{errors.lastName}</span>}
+                    {serverErrors.lastName && <span className="error">{serverErrors.lastName}</span>}
+                </div>
+                <div>
+                    <label htmlFor="gender"><strong>Gender:</strong></label>
+                    <select
+                        className='form-control'
+                        id="gender"
+                        name="gender"
+                        value={form.gender}
+                        onChange={handleInputChange}
+                        disabled={!isEditMode}
+                    >
+                        <option value="">Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    {errors.gender && <span style={{ color: 'red', margin: 0 }} className="error">{errors.gender}</span>}
+                    {serverErrors.gender && <span className="error">{serverErrors.gender}</span>}
+                </div>
+                <div>
+                    <label htmlFor="mobile"><strong>Mobile:</strong></label>
+                    <input
+                        className='form-control'
+                        type="text"
+                        id="mobile"
+                        name="mobile"
+                        value={form.mobile}
+                        onChange={handleInputChange}
+                        disabled={!isEditMode}
+                    />
+                    {errors.mobile && <span style={{ color: 'red' }}>{errors.mobile}</span>}
+                    {serverErrors.mobile && <span className="error">{serverErrors.mobile}</span>}
+                </div>
+                <div>
+                    <label htmlFor="profilePic"><strong> Profile Picture:</strong></label>
+                    <input
+                        className='form-control'
+                        type="file"
+                        id="profilePic"
+                        name="profilePic"
+                        onChange={(e) => setForm({ ...form, profilePic: e.target.files[0] })}
+                        disabled={!isEditMode}
+                    />
+                    {errors.profilePic && <span style={{ color: 'red' }}>{errors.profilePic}</span>}
+                    {serverErrors.profilePic && <span className="error">{serverErrors.profilePic}</span>}
+                </div>
                 <div>
                     <label htmlFor="hospitalName"><strong>Hospital Name:</strong></label>
                     <input
@@ -557,14 +538,7 @@ const DoctorProfile = () => {
                     {errors.hospitalAddress?.pinCode && <span style={{ color: 'red' }}>{errors.hospitalAddress.pinCode}</span>}
                     {serverErrors['hospitalAddress.pinCode'] && <span className="error">{serverErrors['hospitalAddress.pinCode']}</span>}
                 </div>
-                <button  className='btn btn-primary'onClick={handleNext}>Next</button>
-                <button className='btn btn-danger'onClick={handleBack}>Back</button>
-            </form>
-                
-            }
-             {activeStep===2 && 
-                    <form onSubmit={handleSubmit}>
-                        <div>
+                <div>
                     <label htmlFor="yearsOfExperience"><strong>Years of Experience:</strong></label>
                     <input
                         className='form-control'
@@ -605,12 +579,11 @@ const DoctorProfile = () => {
                     {serverErrors.consultationFees && <span className="error">{serverErrors.consultationFees}</span>}
                 </div>
                 <div>
-                    <button className='btn btn-secondary'onClick={handleBack}>Back</button>
                     {isEditMode && <button className='btn btn-danger' type="button" onClick={handleCancelClick}>Cancel</button>}
+                    {!isEditMode && <button className='btn btn-warning' type="button" onClick={handleEditClick}>Edit</button>}
                     <button type="submit" className='btn btn-primary' disabled={!isEditMode}>Save</button>
                 </div>
-                </form>
-                 }
+            </form>
         </div>
     );
 };

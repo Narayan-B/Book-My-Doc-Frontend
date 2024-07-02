@@ -1,8 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-import LanguageList from 'language-list';
-
-const languages = new LanguageList();
 
 const timeOptions = [
     "7:00AM", "7:30AM", "8:00AM", "8:30AM",
@@ -22,12 +19,8 @@ export default function CreateAvailability() {
         consultationStartTime: "",
         consultationEndTime: "",
         consultationTimePerPatient: "",
-        languagesSpoken: [],
-        consultationFees: ""
     });
     const [errors, setErrors] = useState({});
-
-    const languageNames = languages.getLanguageNames();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -37,18 +30,6 @@ export default function CreateAvailability() {
         });
     };
 
-    const handleLanguageChange = (e) => {
-        const { value, checked } = e.target;
-        setForm((prevForm) => {
-            const updatedLanguages = checked
-                ? [...prevForm.languagesSpoken, value]
-                : prevForm.languagesSpoken.filter((lang) => lang !== value);
-            return {
-                ...prevForm,
-                languagesSpoken: updatedLanguages
-            };
-        });
-    };
 
     const validate = () => {
         let errors = {};
@@ -61,12 +42,6 @@ export default function CreateAvailability() {
         }
         if (!form.consultationTimePerPatient) {
             errors.consultationTimePerPatient = "Consultation time per patient is required";
-        }
-        if (form.languagesSpoken.length === 0) {
-            errors.languagesSpoken = "At least one language is required";
-        }
-        if (!/^\d+$/.test(form.consultationFees)) {
-            errors.consultationFees = "Invalid consultation fees";
         }
         setErrors(errors);
         return Object.keys(errors).length === 0;
@@ -91,80 +66,52 @@ export default function CreateAvailability() {
     };
 
     return (
-        <div>
+        <div className='col-md-3'>
             <h1>Create Availability</h1>
             <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Consultation Start Time:</label>
-                    <select 
-                        name="consultationStartTime" 
-                        value={form.consultationStartTime} 
-                        onChange={handleChange}
-                    >
-                        <option value="">Select Start Time</option>
-                        {timeOptions.map(time => (
-                            <option key={time} value={time}>{time}</option>
-                        ))}
-                    </select>
-                    {errors.consultationStartTime && <span>{errors.consultationStartTime}</span>}
-                </div>
-                <div>
-                    <label>Consultation End Time:</label>
-                    <select 
-                        name="consultationEndTime" 
-                        value={form.consultationEndTime} 
-                        onChange={handleChange}
-                    >
-                        <option value="">Select End Time</option>
-                        {timeOptions.map(time => (
-                            <option key={time} value={time}>{time}</option>
-                        ))}
-                    </select>
-                    {errors.consultationEndTime && <span>{errors.consultationEndTime}</span>}
-                </div>
-                <div>
-                    <label>Consultation Time Per Patient:</label>
-                    <select 
-                        name="consultationTimePerPatient" 
-                        value={form.consultationTimePerPatient} 
-                        onChange={handleChange}
-                    >
-                        <option value="">Select Consultation Time</option>
-                        {consultationTimeOptions.map(time => (
-                            <option key={time} value={time}>{time}</option>
-                        ))}
-                    </select>
-                    {errors.consultationTimePerPatient && <span>{errors.consultationTimePerPatient}</span>}
-                </div>
-                <div>
-                    <label>Languages Spoken:</label>
-                    <div>
-                        {languageNames.map(language => (
-                            <div key={language}>
-                                <input 
-                                    type="checkbox" 
-                                    id={language}
-                                    value={language}
-                                    onChange={handleLanguageChange}
-                                    checked={form.languagesSpoken.includes(language)}
-                                />
-                                <label htmlFor={language}>{language}</label>
-                            </div>
-                        ))}
-                    </div>
-                    {errors.languagesSpoken && <span>{errors.languagesSpoken}</span>}
-                </div>
-                <div>
-                    <label>Consultation Fees:</label>
-                    <input 
-                        type="text" 
-                        name="consultationFees" 
-                        value={form.consultationFees} 
-                        onChange={handleChange} 
-                    />
-                    {errors.consultationFees && <span>{errors.consultationFees}</span>}
-                </div>
-                <button type="submit">Create Availability</button>
+                <label>Consultation Start Time:</label>
+                <select 
+                    className='form-control'
+                    name="consultationStartTime" 
+                    value={form.consultationStartTime} 
+                    onChange={handleChange}
+                >
+                    <option value="">Select Start Time</option>
+                    {timeOptions.map(time => (
+                        <option key={time} value={time}>{time}</option>
+                    ))}
+                </select>
+                {errors.consultationStartTime && <span>{errors.consultationStartTime}<br/></span>}
+
+                <label>Consultation End Time:</label>
+                <select 
+                    className='form-control'
+                    name="consultationEndTime" 
+                    value={form.consultationEndTime} 
+                    onChange={handleChange}
+                >
+                    <option value="">Select End Time</option>
+                    {timeOptions.map(time => (
+                        <option key={time} value={time}>{time}</option>
+                    ))}
+                </select>
+                {errors.consultationEndTime && <span>{errors.consultationEndTime}<br/></span>}
+
+                <label>Consultation Time Per Patient:</label>
+                <select 
+                    className='form-control'
+                    name="consultationTimePerPatient" 
+                    value={form.consultationTimePerPatient} 
+                    onChange={handleChange}
+                >
+                    <option value="">Select Consultation Time</option>
+                    {consultationTimeOptions.map(time => (
+                        <option key={time} value={time}>{time}</option>
+                    ))}
+                </select>
+                {errors.consultationTimePerPatient && <span>{errors.consultationTimePerPatient}<br/></span>}
+
+                <button className='btn btn-primary' type="submit">Create Availability</button>
             </form>
         </div>
     );
