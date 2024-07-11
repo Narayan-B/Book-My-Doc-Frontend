@@ -3,12 +3,14 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Helmet } from 'react-helmet';
 import { Link, Routes, Route } from 'react-router-dom';
+import { Navbar, Nav, NavItem, NavLink, Collapse, NavbarToggler } from 'reactstrap';
 import { useSelector } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.min.css';
+
+
 import Home from './components/Home';
 import Register from './components/Register';
 import Login from './components/Login';
-import { useAuth } from './context/AuthContext';
 import Account from './components/Account';
 import Profile from './components/Profile';
 import PrivateRoute from './components/PrivateRoute';
@@ -20,7 +22,8 @@ import AllVerifiedDoctors from './components/AllVerifiedDoctors';
 import AllDoctors from './components/adminDashboard/AllDoctors';
 import AllPatients from './components/adminDashboard/AllPatients';
 import ResetPassword from './components/ResetPassword';
-import { Navbar, Nav, NavItem, NavLink, Collapse, NavbarToggler } from 'reactstrap';
+import BookAppointment from './components/BookAppointment';
+
 
 function App() {
   const { user, handleLogin, handleLogout } = useAuth();
@@ -74,17 +77,22 @@ function App() {
       </Helmet>
       
       <Navbar color="primary" light expand="md">
+
         <NavbarToggler onClick={toggle} />
+
         <Collapse isOpen={isOpen} navbar>
           <Nav className="mr-auto" navbar>
+
             <NavItem>
               <NavLink tag={Link} to="/">Home</NavLink>
             </NavItem>
+
             {!user ? (
               <>
                 <NavItem>
                   <NavLink tag={Link} to="/register">Register</NavLink>
                 </NavItem>
+
                 <NavItem>
                   <NavLink tag={Link} to="/login">Login</NavLink>
                 </NavItem>
@@ -94,17 +102,21 @@ function App() {
                 <NavItem>
                   <NavLink tag={Link} to="/account">Account</NavLink>
                 </NavItem>
+
                 {user.role === 'admin' && (
                   <>
                     <NavItem>
                       <NavLink tag={Link} to="/profile">Profile</NavLink>
                     </NavItem>
+
                     <NavItem>
                       <NavLink tag={Link} to="/all-doctors">See Doctors</NavLink>
                     </NavItem>
+
                     <NavItem>
                       <NavLink tag={Link} to="/all-patients">See Patients</NavLink>
                     </NavItem>
+
                   </>
                 )}
                 {user.role === 'patient' && (
@@ -117,20 +129,25 @@ function App() {
                     <NavItem>
                       <NavLink tag={Link} to="/doctor-profile">Profile</NavLink>
                     </NavItem>
+
                     <NavItem>
                       <NavLink tag={Link} to="/create-availability">Create Availability</NavLink>
                     </NavItem>
+
                   </>
                 )}
               </>
             )}
            {!user || ((user && user.role !== 'admin') && (user.role !== 'doctor')) ? (
+
               <NavItem>
                 <NavLink tag={Link} to="/all-verified-doctors">Book Doctors</NavLink>
               </NavItem>
+
             ) : null}
             {user && (
               <NavItem>
+
                 <NavLink
                   tag={Link}
                   to="/"
@@ -141,16 +158,18 @@ function App() {
                 >
                   Logout
                 </NavLink>
+
               </NavItem>
             )}
           </Nav>
         </Collapse>
+
       </Navbar>
       
       <div className='container'>
         <Routes>
-          <Route path='/all-verified-doctors' element={<PrivateRoute permittedRoles={[undefined, 'patient']}><AllVerifiedDoctors /></PrivateRoute>} />
-          <Route path='/' element={<Home />} />
+
+          <Route path='/' element={<Home/>} />
           <Route path='/register' element={<Register />} />
           <Route path='/login' element={<Login />} />
           <Route path='/account' element={<Account />} />
@@ -159,8 +178,12 @@ function App() {
           <Route path='/all-patients' element={<PrivateRoute permittedRoles={['admin']}><AllPatients /></PrivateRoute>} />
           <Route path='/profile' element={<PrivateRoute permittedRoles={['admin', 'patient']}><Profile /></PrivateRoute>} />
           <Route path='/doctor-profile' element={<PrivateRoute permittedRoles={['doctor']}><DoctorProfile /></PrivateRoute>} />
+          <Route path='/book-appointment/:id' element={<PrivateRoute permittedRoles={['patient']}><BookAppointment /></PrivateRoute>} />
+          <Route path='/all-verified-doctors' element={<PrivateRoute permittedRoles={[undefined, 'patient']}><AllVerifiedDoctors /></PrivateRoute>} />
           <Route path='/create-availability' element={<PrivateRoute permittedRoles={['doctor']}><CreateAvailability /></PrivateRoute>} />
+
           <Route path='*' element={<PageNotFound />} />
+          
           {email.length > 0 && <Route path='/reset-password' element={<ResetPassword />} />}
         </Routes>
       </div>

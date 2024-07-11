@@ -91,14 +91,14 @@ const Profile = () => {
         profilePic: Yup.mixed()
             .test('fileType', 'Image must be jpeg or png', function(value) {
                 if (!value) {
-                    return true; // Allow no file for PUT request
+                    return true; 
                 }
                 return ['image/jpeg', 'image/png'].includes(value.type);
             })
             .nullable(),
     });
 
-    // Handle form submission
+   
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -112,7 +112,6 @@ const Profile = () => {
             formData.append('pincode', form.pincode);
             formData.append('address', form.address);
 
-            // Append profilePic only if it exists and is a File
             if (form.profilePic instanceof File) {
                 formData.append('profilePic', form.profilePic);
             }
@@ -178,7 +177,6 @@ const Profile = () => {
         }
     };
 
-    // Handle form input changes
     const handleChange = (e) => {
         const { name, value, files } = e.target;
 
@@ -191,7 +189,6 @@ const Profile = () => {
             [name]: ''
         }));
 
-        // Update form state based on input type
         if (name === 'profilePic') {
             setForm(prevForm => ({
                 ...prevForm,
@@ -211,52 +208,58 @@ const Profile = () => {
     };
 
     return (
-        <div>
-            <h4>{profileData ? "EDIT" : "ADD"} PROFILE</h4>
-            <form onSubmit={handleSubmit}>
-                <div className='col-md-4'>
-                    <label htmlFor="firstName"><strong>First Name: </strong></label>
-                    <input className='form-control' type="text" id="firstName" name="firstName" value={form.firstName} onChange={handleChange} disabled={!isEditMode && isProfileCreated} />
-                    {errors.firstName && <p style={{ color: 'red' }}>{errors.firstName}</p>}
-                    {serverErrors.firstName && <p style={{ color: 'red' }}>{serverErrors.firstName}</p>}
+        <div className="container">
+            <div className="row justify-content-center mt-5">
+                <div className="col-md-4">
+                    <h4 className="text-center">{profileData ? "EDIT" : "ADD"} PROFILE</h4>
+                    <form onSubmit={handleSubmit}>
+                        <label htmlFor="firstName"><strong>First Name: </strong></label>
+                        <input className='form-control' type="text" id="firstName" name="firstName" value={form.firstName} onChange={handleChange} disabled={!isEditMode && isProfileCreated} />
+                        {errors.firstName && <p style={{ color: 'red' }}>{errors.firstName}</p>}
+                        {serverErrors.firstName && <p style={{ color: 'red' }}>{serverErrors.firstName}</p>}
 
-                    <label htmlFor="lastName"><strong>Last Name: </strong></label>
-                    <input className='form-control'type="text" id="lastName" name="lastName" value={form.lastName} onChange={handleChange} disabled={!isEditMode && isProfileCreated} />
-                    {errors.lastName && <p style={{ color: 'red' }}>{errors.lastName}</p>}
-                    {serverErrors.lastName && <p style={{ color: 'red' }}>{serverErrors.lastName}</p>}
-            
-                    <label htmlFor="mobile"><strong>Mobile:</strong></label>
-                    <input className='form-control'type="text" id="mobile" name="mobile" value={form.mobile} onChange={handleChange} disabled={!isEditMode && isProfileCreated} />
-                    {errors.mobile && <p style={{ color: 'red' }}>{errors.mobile}</p>}
-                    {serverErrors.mobile && <p style={{ color: 'red' }}>{serverErrors.mobile}</p>}
-                
-                    <label htmlFor="pincode"><strong>Pincode:</strong></label>
-                    <input className='form-control'type="text" id="pincode" name="pincode" value={form.pincode} onChange={handleChange} disabled={!isEditMode && isProfileCreated} />
-                    {errors.pincode && <p style={{ color: 'red' }}>{errors.pincode}</p>}
-                    {serverErrors.pincode && <p style={{ color: 'red' }}>{serverErrors.pincode}</p>}
-               
-                    <label htmlFor="address"><strong>Address:</strong></label>
-                    <input className='form-control'type="text" id="address" name="address" value={form.address} onChange={handleChange} disabled={!isEditMode && isProfileCreated} />
-                    {errors.address && <p style={{ color: 'red' }}>{errors.address}</p>}
-                    {serverErrors.address && <p style={{ color: 'red' }}>{serverErrors.address}</p>}
-              
-                    <label htmlFor="profilePic"><strong>Profile Picture:</strong></label>
-                    <input className='form-control'type="file" id="profilePic" name="profilePic" onChange={handleChange} disabled={!isEditMode && isProfileCreated} />
-                    {errors.profilePic && <p style={{ color: 'red' }}>{errors.profilePic}</p>}
-                    {serverErrors.profilePic && <p style={{ color: 'red' }}>{serverErrors.profilePic}</p>}
-                
-                    {isEditMode && (
-                        <button className='btn btn-primary'type="submit">Submit Changes</button>
-                    )}
-                    {!isEditMode && !isProfileCreated && (
-                        <button  className='btn btn-primary'type="submit">Create Profile</button>
-                    )}
-                    {!isEditMode && isProfileCreated && (
-                        <button  className='btn btn-primary'type="button" onClick={handleEditClick}>Edit Profile</button>
-                    )}
+                        <label htmlFor="lastName"><strong>Last Name: </strong></label>
+                        <input className='form-control' type="text" id="lastName" name="lastName" value={form.lastName} onChange={handleChange} disabled={!isEditMode && isProfileCreated} />
+                        {errors.lastName && <p style={{ color: 'red' }}>{errors.lastName}</p>}
+                        {serverErrors.lastName && <p style={{ color: 'red' }}>{serverErrors.lastName}</p>}
+
+                        <label htmlFor="mobile"><strong>Mobile:</strong></label>
+                        <input className='form-control' type="text" id="mobile" name="mobile" value={form.mobile} onChange={handleChange} disabled={!isEditMode && isProfileCreated} />
+                        {errors.mobile && <p style={{ color: 'red' }}>{errors.mobile}</p>}
+                        {serverErrors.mobile && <p style={{ color: 'red' }}>{serverErrors.mobile}</p>}
+
+                        <label htmlFor="pincode"><strong>Pincode:</strong></label>
+                        <input className='form-control' type="text" id="pincode" name="pincode" value={form.pincode} onChange={handleChange} disabled={!isEditMode && isProfileCreated} />
+                        {errors.pincode && <p style={{ color: 'red' }}>{errors.pincode}</p>}
+                        {serverErrors.pincode && <p style={{ color: 'red' }}>{serverErrors.pincode}</p>}
+
+                        <label htmlFor="address"><strong>Address:</strong></label>
+                        <input className='form-control' type="text" id="address" name="address" value={form.address} onChange={handleChange} disabled={!isEditMode && isProfileCreated} />
+                        {errors.address && <p style={{ color: 'red' }}>{errors.address}</p>}
+                        {serverErrors.address && <p style={{ color: 'red' }}>{serverErrors.address}</p>}
+
+                        <label htmlFor="profilePic"><strong>Profile Picture:</strong></label>
+                        <input className='form-control' type="file" id="profilePic" name="profilePic" onChange={handleChange} disabled={!isEditMode && isProfileCreated} />
+                        {errors.profilePic && <p style={{ color: 'red' }}>{errors.profilePic}</p>}
+                        {serverErrors.profilePic && <p style={{ color: 'red' }}>{serverErrors.profilePic}</p>}
+
+                        {isEditMode && (
+                            <button className='btn btn-primary' type="submit">Submit Changes</button>
+                        )}
+
+                        {!isEditMode && !isProfileCreated && (
+                            <button className='btn btn-primary' type="submit">Create Profile</button>
+                        )}
+
+                        {!isEditMode && isProfileCreated && (
+                            <button className='btn btn-primary' type="button" onClick={handleEditClick}>Edit Profile</button>
+                        )}
+
+                    </form>
+                    
+                    {serverErrors._error && <p style={{ color: 'red' }}>{serverErrors._error}</p>}
                 </div>
-            </form>
-            {serverErrors._error && <p style={{ color: 'red' }}>{serverErrors._error}</p>}
+            </div>
         </div>
     );
 };

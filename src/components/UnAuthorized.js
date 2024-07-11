@@ -3,14 +3,14 @@ import { Button, Container, Row, Col } from 'reactstrap';
 import unauthorized from '../assets/images/unauthorized.webp'
 export default function Unauthorized() {
   const backgroundStyle = {
-    backgroundImage: `url(${unauthorized})`,  // Path to the image in the public directory
+    backgroundImage: `url(${unauthorized})`,  
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     height: '100vh',
     display: 'flex',
-    flexDirection: 'column',  // Stack items vertically
-    alignItems: 'center',     // Center horizontally
-    justifyContent: 'center', // Center vertically
+    flexDirection: 'column',  
+    alignItems: 'center',    
+    justifyContent: 'center', 
     color: '#fff',
     textAlign: 'center' 
   };

@@ -18,8 +18,11 @@ export default function PageNotFound() {
 
   return (
     <div style={backgroundStyle}>
+
       <Container>
+
         <Row className="justify-content-center">
+
           <Col xs="10" md="8" lg="6" className="text-top-center"> {/* Added text-top-center class */}
             <h1 className="display-3 text-danger mt-5">404</h1>
             <h2 className="mb-4">Page not found</h2>
@@ -28,7 +31,9 @@ export default function PageNotFound() {
               <Button color="primary" href="/">Go back home</Button>
             </div>
           </Col>
+          
         </Row>
+
       </Container>
     </div>
   );

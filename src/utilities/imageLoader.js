@@ -1,4 +1,3 @@
-// src/utilities/loadImages.js
 function importAll(r) {
     let images = {};
     r.keys().map((item, index) => {

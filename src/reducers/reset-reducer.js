@@ -12,18 +12,21 @@ const resetReducer = (state = initialState, action) => {
         ...state,
         error: '',
       };
+
     case RESET_PASSWORD_SUCCESS:
       return {
         ...state,
         msg:action.payload.message,
         error: '',
       };
+
     case RESET_PASSWORD_FAILURE:
       return {
         ...state,
         error: action.payload,
         msg:''
       };
+      
     default:
       return state;
   }

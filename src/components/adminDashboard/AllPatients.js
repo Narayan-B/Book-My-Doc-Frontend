@@ -15,7 +15,7 @@ export default function AllPatients (){
         setPatients(response.data);
         console.log(response.data);
       } catch (err) {
-        console.error("Error fetching doctors:", err);
+        console.error("Error fetching doctors:", err)
       }
     };
     fetchPatients();

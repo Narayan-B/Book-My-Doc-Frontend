@@ -31,11 +31,9 @@ export const startResetPassword = (formData,toggle,navigate) => {
       toggle()
       toast.success(response.data.message) ;
       navigate('/login')
-      
     } catch (error) {
         console.log(error)
       dispatch(resetPasswordFailure(error.response?.data?.message));
-      
     }
   };
 };

@@ -10,10 +10,9 @@ function ResetPassword(props) {
   const error = useSelector((state) => state.reset.error);
   const dispatch = useDispatch();
   const navigate=useNavigate()
-  const [modal, setModal] = useState(true); // Set initial state to true to show modal
-  const [formSubmitted, setFormSubmitted] = useState(false); // State to track form submission
-  const [otpError, setOtpError] = useState(''); // State to store OTP specific error
-
+  const [modal, setModal] = useState(true); 
+  const [formSubmitted, setFormSubmitted] = useState(false); 
+  const [otpError, setOtpError] = useState(''); 
   const toggle = () => setModal(!modal);
 
   const resetPasswordSchema = Yup.object().shape({
@@ -27,7 +26,8 @@ function ResetPassword(props) {
       .matches(/\d/, 'Password must contain at least one number')
       .matches(/[@$!%*?&#]/, 'Password must contain at least one special character')
       .required('New Password is required'),
-  });
+  })
+
   const formik = useFormik({
     initialValues: {
       otp: '',
@@ -35,15 +35,14 @@ function ResetPassword(props) {
     },
     validationSchema: resetPasswordSchema,
     onSubmit: async (values) => {
-      console.log('Form submitted'); // Check if this log appears
+      console.log('Form submitted'); 
       try {
-        await formik.validateForm(); // Validate form using Formik's built-in validation
+        await formik.validateForm(); 
         await dispatch(startResetPassword({ email, otp: values.otp, newPassword: values.newPassword },toggle,navigate));
         setFormSubmitted(true); 
       } catch (error) {
-        console.error('Error:', error); // Log any errors
+        //console.error('Error:', error); 
         if (error.response && error.response.status === 400) {
-          // Handle specific OTP validation error here
           setOtpError('Invalid OTP. Please check and try again.');
         } else {
           setOtpError('Failed to reset password. Please try again later.');
@@ -66,8 +65,11 @@ function ResetPassword(props) {
 
   return (
     <div>
+
       <Modal isOpen={modal} toggle={toggle} {...props} onClosed={resetErrors}>
+
         <ModalHeader toggle={toggle}>Reset Password</ModalHeader>
+
         <ModalBody>
           {formSubmitted && otpError && (
             <div className="alert alert-danger">{otpError}</div>
@@ -103,17 +105,21 @@ function ResetPassword(props) {
                 <div className="invalid-feedback">{formik.errors.newPassword}</div>
               ) : null}
             </div>
+
             <Button color="primary" type="submit">
               Reset Password
             </Button>
           </form>
         </ModalBody>
+
         <ModalFooter>
           <Button color="secondary" onClick={toggle}>
             Cancel
           </Button>
         </ModalFooter>
+
       </Modal>
+      
       {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>
   );

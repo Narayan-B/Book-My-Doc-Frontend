@@ -4,9 +4,10 @@ import axios from "axios";
 import {BsGeoAltFill} from 'react-icons/bs'
 import { FaHospitalAlt } from "react-icons/fa";
 import { IoMdTime } from "react-icons/io"
-import { RiMoneyRupeeCircleFill } from "react-icons/ri";
+import { FcMoneyTransfer } from "react-icons/fc";
 import { Card, CardBody, CardTitle, CardSubtitle, CardText, Button, Container, Row, Col, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { useAuth } from "../context/AuthContext";
+
 export default function AllVerifiedDoctors() {
     const navigate=useNavigate()
     const {user}=useAuth()
@@ -24,10 +25,10 @@ export default function AllVerifiedDoctors() {
                 console.log(err); 
             }
         };
-
         fetchDoctors();
     }, []);
-    console.log('doctors',doctors)
+    //console.log('doctors',doctors)
+
     const toggleModal = () => {
         setModalOpen(!modalOpen);
     }
@@ -36,16 +37,19 @@ export default function AllVerifiedDoctors() {
         setSelectedDoctor(doctor);
         toggleModal();
     }
-    const handleBook=()=>{
+
+    const handleBook=(id)=>{
+        if(user){
+            navigate(`/book-appointment/${id}`)
+        }
         if(!user){
             navigate('/login')
-
         }
     }
 
     return (
         <Container>
-            <h1 className="mt-5 mb-4">All Doctors</h1>
+           <h1 className="text-center">All Doctors</h1>
             <Row>
                 {doctors.map((doctor) => (
                     <Col key={doctor._id} md="4" className="mb-4">
@@ -60,21 +64,18 @@ export default function AllVerifiedDoctors() {
                             <CardBody>
                                 <CardTitle tag="h5">{doctor.firstName} {doctor.lastName}</CardTitle>
                                 <CardSubtitle tag="h6" className="mb-2 text-muted">{doctor.userId.speciality}</CardSubtitle>
-                                <CardText><><IoMdTime/></>   {doctor.yearsOfExperience} years Of Experience</CardText>
+                                <CardText><><IoMdTime/></>{doctor.yearsOfExperience} years Of Experience</CardText>
                                 <CardText><><FaHospitalAlt/></> {doctor.hospitalName} Hospital</CardText>
                                 <CardText><><BsGeoAltFill/></>{doctor.hospitalAddress.city}</CardText>
-                                <CardText><><RiMoneyRupeeCircleFill/></>{doctor.consultationFees}</CardText>
-                                
+                                <CardText><><FcMoneyTransfer/></>{doctor.consultationFees}/-</CardText>
                                 {user && 
                                 <>
                                 <Button color="primary" onClick={() => handleViewProfile(doctor)}>View Profile</Button>
-
                                 </>
                                 }
                                 <div style={{ position: 'absolute', bottom: 14, right: 14 }}>
-                                    <Button onClick={handleBook}color="primary">Book</Button>
+                                    <Button onClick={()=>handleBook(doctor.userId._id)}color="primary">Book</Button>
                                 </div>
-                               
                             </CardBody>
                         </Card>
                     </Col>
@@ -101,13 +102,15 @@ export default function AllVerifiedDoctors() {
                                     </span>
                                  ))}</p>
                                  <p><strong>Consultation Fees: </strong>{selectedDoctor.consultationFees}</p>
-                            {/* Add more fields as needed */}
                         </div>
                     )}
                 </ModalBody>
                 <ModalFooter>
+
                     <Button color="secondary" onClick={toggleModal}>Close</Button>
-                    <Button color="primary">Book</Button>
+                    <Button onClick={handleBook} color="primary">Book</Button>
+
+                    
                 </ModalFooter>
             </Modal>
         </Container>

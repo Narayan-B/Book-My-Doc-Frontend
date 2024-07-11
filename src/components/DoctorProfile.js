@@ -45,14 +45,15 @@ const DoctorProfile = () => {
             languagesSpoken: selectedList.map(lang => lang.name)
         });
     };
+
     const handleNext = () => {
         setActiveStep(prevActiveStep => prevActiveStep + 1);
       };
-
     
       const handleBack = () => {
         setActiveStep(prevActiveStep => prevActiveStep - 1);
       };
+
     const handleLanguageRemove = (selectedList) => {
         setForm({
             ...form,
@@ -70,7 +71,6 @@ const DoctorProfile = () => {
                 });
                 const data = response.data;
                 setProfileData(data);
-
                 if (data) {
                     setForm({
                         firstName: data.firstName || '',
@@ -93,7 +93,7 @@ const DoctorProfile = () => {
                     setIsProfileCreated(true);
                 } else {
                     setIsProfileCreated(false);
-                    setIsEditMode(true); // Enable edit mode if no profile is created
+                    setIsEditMode(true); 
                     setForm({
                         firstName: '',
                         lastName: '',
@@ -201,7 +201,6 @@ const DoctorProfile = () => {
         try {
             const validationSchema = isProfileCreated ? editValidationSchema : createValidationSchema;
             await validationSchema.validate(form, { abortEarly: false });
-
             const formData = new FormData();
             formData.append('firstName', form.firstName);
             formData.append('lastName', form.lastName);
@@ -241,7 +240,7 @@ const DoctorProfile = () => {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-            console.log(response.data)
+            //console.log(response.data)
 
             setForm(prevForm => ({
                 ...prevForm,

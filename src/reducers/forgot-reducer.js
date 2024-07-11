@@ -1,5 +1,3 @@
-// forgotReducer.js
-
 import { CLEAR_FORGOT_ERROR, FORGOT_PASSWORD_FAILURE, FORGOT_PASSWORD_REQUEST } from '../actions/forgot-action';
 
 const initialState = {
@@ -12,7 +10,7 @@ const forgotReducer = (state = initialState, action) => {
     case FORGOT_PASSWORD_REQUEST:
       return {
         ...state,
-        email: action.payload.email, // Update state with relevant data from success action
+        email: action.payload.email, 
         error: '',
       };
       
@@ -21,9 +19,11 @@ const forgotReducer = (state = initialState, action) => {
         ...state,
         error: action.payload,
       };
+
       case CLEAR_FORGOT_ERROR:{
         return {...state,error:''}
       }
+      
     default:
       return state;
   }
